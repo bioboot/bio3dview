@@ -1,0 +1,256 @@
+---
+title: "Getting Started with Bio3DView"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bio3dview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Overview
+
+[**Bio3DView**](https://github.com/bioboot/bio3dview) is an R package for biomolecular visualization. It is intended to complement the main [Bio3D](http://thegrantlab.org/bio3d/) structural bioinformatics analysis package and the [NGLVieweR](https://nvelden.github.io/NGLVieweR/) visualization package.
+
+Major features include the ability to interactively view biomolecular structures (`pdb` objects from the Bio3D package), structural ensembles (`pdbs` objects) as well as the results of Normal Mode Analysis (`nma` objects), Principal Component Analysis (`pca` objects) and various types of computed dynamic trajectory data (`xyz` objects). All while using minimal code and sensible defaults.
+
+The package itself contains a number of `**view.___()**` functions (such as `view.pdb()`, `view.pdbs()`, `view.pca()`, `view.nma()` and `view.xyz()`) with the output in each case being an NGLVieweR object that can be further customized and added to using NGLVieweR functions (such as `addRepresentation()` etc.).
+
+> **Side-note**: In the future all of these `view.___()` functions will be object oriented and called from a single `view()` function. However, that is currently not implemented as we continue to explore the most useful features for each individual use case.
+
+## Earlier work and related packages
+
+To the best of our knowledge the first molecular visualization package in R was Julien Ide's [Rpdb](https://cran.r-project.org/web/packages/Rpdb/index.html) that used **rgl** to render it's graphics primitives. At this time, over a decade ago, an early [bio3d-view](https://bitbucket.org/Grantlab/bio3d-view/src/master/) package was published that again used rgl and had contributions from both Juien and Barry (the authors of **Rpdb** and **bio3d**). This package had the ability to render interactive 3D visualizations of biomolecular structures from various sources within the bio3d package and serves as a model for the current bio3dview package.
+
+Related contemporary work includes the [r3dmol](https://github.com/swsoyee/r3dmol) and [NGLVieweR](https://nvelden.github.io/NGLVieweR/) packages. Both of these are htmlwidget interfaces to underlying 3Dmol.js and NGL.js libraries respectively. Both packages offer many more representation styles and coloring options for interactive, 3D molecular visualization. We have experimented extensively with both r3dmol and NGLvieweR and found that r3dmol has no atom-based selection ability and the authors have [no plans to upgrade to the latest JS library that would enable this feature](https://github.com/swsoyee/r3dmol/issues/56). Primarily for this reason, and because of the currently superior NGL graphics, we have decided to implement the latest bio3dview with NGLVieweR going forward.
+
+## Installation
+
+This bio3dview package is not yet on CRAN but can be installed from [GitHub](https://github.com/bioboot/bio3dview) with:
+
+``` r
+# install.packages("pak")
+pak::pak("bioboot/bio3dview")
+```
+
+Dependencies include the CRAN packages [bio3d](https://cran.r-project.org/web/packages/bio3d/index.html) and [NGLVieweR](https://cran.r-project.org/web/packages/NGLVieweR/), which can be installed from CRAN with:
+
+``` r
+install.packages("bio3d")
+install.packages("NGLVieweR")
+```
+
+## Basic usage
+
+First load all three related companion packages:
+
+```{r setup}
+library(bio3dview)
+library(bio3d)
+library(NGLVieweR)
+```
+
+Let's begin with reading an online PDB structure of HRas (with PDB code: 5p21) and generating the default rainbow colored protein cartoon with bound nucleotide ligand and ions highlighted in atom colored licorice representation.
+
+```{r overview, warning=FALSE}
+ras <- read.pdb("5p21")
+view.pdb(ras)
+```
+
+If you are young and hip and prefer to use pipes you can obviously do the same thing this way:
+
+```{r pipe, eval=FALSE}
+"5p21" |> 
+  read.pdb() |> 
+  view.pdb()
+```
+
+You can customize the display in many ways, for example lets color by secondary structure, change the background color and highlight some key residues as spacefill/vdw:
+
+```{r}
+view.pdb(ras, backgroundColor = "pink", colorScheme="sse",
+         highlight = atom.select(ras, resno=45:48),
+         highlight.style="vdw")
+```
+
+You can always save the returned object and add to them later, for example
+
+```{r}
+v <- view.pdb(ras, water.rm = TRUE)
+addRepresentation(v, "ball+stick") |>
+  setSpin()
+```
+
+## Multi-model files
+
+The `view.pdb()` function is designed to deal with multi-model files produced as trajectories from bio3d or obtained from any other source such as NMR structures, for example:
+
+```{r}
+pdb <- read.pdb("2MPS", multi=TRUE)
+view.pdb(pdb) 
+```
+
+## Multiple structure ensembles
+
+To view `pdbs` multi-structure objects from bio3d use the `view.pdbs()` function, for example:
+
+```{r pdbs1, warning=FALSE}
+data(transducin)
+attach(transducin)
+
+view.pdbs(pdbs)
+```
+
+The default above is to color each structure individually using VMD colors (as returned from `vmd_colors()`. These can be changed with the `cols` input argument to `view.pdbs()` as shown further below. Before that it is often useful to color by residue index, for example:
+
+```{r}
+view.pdbs(pdbs, colorScheme="resi")
+
+
+
+```
+
+Or by
+
+```{r}
+view.pdbs(pdbs, representation="tube", cols=annotation[,"color"])
+
+```
+
+And using some vector to color by see old vec2color() [here](<https://bitbucket.org/Grantlab/bio3d-view/src/master/R/view.pdb.R>):
+
+```{r}
+## define a color scale for RMSF vector
+#rf=vec2color(rmsf(pdbs$xyz))
+rf <- rmsf(pdbs$xyz)
+#view.pdbs(pdbs, b=rf)
+
+```
+
+```         
+
+
+##- 3. View the results of PCA on this structure set (i.e. a \sQuote{xyz} class object)
+example(pca.xyz) ## Press RTN.
+
+a <- mktrj.pca(pc.xray, pc=1, file="pc1.pdb")
+view.xyz(a, col="gray")
+
+# Use d.cut option to increase C-alpha to C-alpha 'trace/bonding' distance if required
+view.xyz(a, col=vec2color(rmsf(a)), d.cut=6) 
+
+
+
+## Use add=TRUE to add to previous view
+view(pdbs)
+view(a, col="#808080", add=T)
+
+
+
+##- 4. View the results of NMA (i.e. a \sQuote{xyz} class object)
+modes <- nma( read.pdb("1hel") )
+m7 <- mktrj.nma(modes, mode=7, file="mode_7.pdb")
+view.xyz(m7, col=vec2color(rmsf(m7)))  
+
+
+##- 5. View the results of CNA (i.e. a \sQuote{cna} class object)
+#example(plot.cna)
+#visualize.cna(net, pdb, xyz.axes=F)
+##=> cant turn axis off curently. To be updated as a view function...
+
+
+
+##- 6. Simple subregion highlighting
+pdbfile <- system.file("examples/hivp.pdb", package="bio3d")
+pdb <- read.pdb(pdbfile)
+
+## Select and color residues 24 to 27 in both chains
+inds <- atom.select(pdb, resno=c(24:27))
+mycols <- rep("white", nrow(pdb$atom))
+mycols[inds$atom] <- "red"
+
+view(pdb, col=mycols)
+view.xyz(pdb$xyz[inds$xyz], col="green", type="s", add=TRUE)
+
+
+## Motif example highlighting should be easier than the below
+##   Ideally allowing updating of the current display with selections
+
+## Lets color motif position
+pdb <- read.pdb("5p21")
+motif <- "G....GK[ST]"
+aa.seq <- pdbseq(pdb)
+pos <- motif.find(motif, aa.seq)
+
+aa.seq[pos]
+
+col <- rep("gray", nrow(pdb$atom))
+col[ pdb$atom$resno %in% names(aa.seq[pos]) ] = "red"
+
+view(pdb, "calpha", col=col)
+
+
+
+##-- Define a color scale for B-factor coloring etc!!
+v <- vec2color( pdb$atom$b )
+view.pdb(pdb, "overview", col=v)
+}
+}
+```
+
+```{r}
+n <- nma(ras)
+view.nma(n)
+```
+
+```{r}
+#plot(n, sse=ras)
+```
+
+Not working yet!
+```{r}
+#view.nma(n, pdb=ras, b=n$fluctuations, colorScheme = "b")
+```
+
+### Reading PDB file data into R
+
+To read a single PDB file with [Bio3D]() we can use the `read.pdb()` function. The minimal input required for this function is a specification of the file to be read. This can be either the file name of a local file on disc, or the RCSB PDB identifier of a file to read directly from the on-line [PDB repository](). For example to read and inspect the on-line file with PDB ID **1HSG**:
+
+```{r input, warning=FALSE}
+pdb <- read.pdb("1hsg")
+```
+
+To get a quick summary of the contents of the `pdb` object you just created you can issue the command `print(pdb)` or simply type `pdb` (which is equivalent in this case):
+
+```{r}
+pdb
+```
+
+Note that the attributes `(+ attr:)` of this object are listed on the last couple of lines. To find the attributes of any such object you can use:
+
+```{r}
+attributes(pdb)
+```
+
+To access these individual attributes we use the `dollar-attribute` name convention that is common with R list objects. For example, to access the atom attribute or component use `pdb$atom`:
+
+```{r}
+head(pdb$atom)
+```
+
+To obtain a quick interactive molecular visualization of any such `pdb` class object we can use the `view.pdb()` function:
+
+```{r}
+#view.pdb(pdb)
+```
+
+## Saving an image
+
+ToDo: how best to capture such an image? Can we use `snapShot()` see: https://nvelden.github.io/NGLVieweR/reference/snapShot.html
+

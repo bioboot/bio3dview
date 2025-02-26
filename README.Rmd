@@ -1,6 +1,5 @@
 ---
 output: github_document
-always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -48,7 +47,7 @@ library(bio3d)
 library(NGLVieweR)
 
 pdb <- read.pdb("1hsg")
-view.pdb(pdb)
+#view.pdb(pdb)
 ```
 ```{r}
 #htmlwidgets::saveWidget(v, "man/figures/temp.html")
@@ -57,52 +56,52 @@ view.pdb(pdb)
 
 
 ```{r example2}
-view.pdb(pdb, ligand=FALSE, cols=c("pink","aquamarine"))
+#view.pdb(pdb, ligand=FALSE, cols=c("pink","aquamarine"))
 ```
 
 ```{r example3}
-view.pdb(pdb, colorScheme = "sstruc", backgroundColor = "black")
+#view.pdb(pdb, colorScheme = "sstruc", backgroundColor = "black")
 ```
 
 ```{r example4}
 sele <- atom.select(pdb, resno=c(25, 50))
-view.pdb(pdb, highlight = sele,
-        cols = c("navy","orange"),
-        backgroundColor = "pink",
-        highlight.style = "spacefill")
+#view.pdb(pdb, highlight = sele,
+#        cols = c("navy","orange"),
+#        backgroundColor = "pink",
+#        highlight.style = "spacefill")
 ```
 
 Quick interactive multi-structure ensemble bio3d pdbs object viewing using the NGLVieweR package.
 
 ```{r example5}
-pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-files <- list.files(path=pth, full.names = TRUE)
-pdbs <- pdbaln(files, fit=TRUE, exefile="msa")
+#pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+#files <- list.files(path=pth, full.names = TRUE)
+#pdbs <- pdbaln(files, fit=TRUE, exefile="msa")
 
-view.pdbs(pdbs, representation = "cartoon")
+#view.pdbs(pdbs, representation = "cartoon")
 ```
 
 ```{r example6}
-view.pdbs(pdbs, colorScheme = "residueindex")
+#view.pdbs(pdbs, colorScheme = "residueindex")
 ```
 
 And a PCA analysis result
 
 ```{r example7}
-pc <- pca(pdbs)
+#pc <- pca(pdbs)
 
 # Plot a single conformer plot of PC1 v PC2
-plot(pc, pc.axes = 1:2)
+#plot(pc, pc.axes = 1:2)
 ```
 
 ```{r example8}
 ## Plot atom wise loadings
-plot.bio3d(pc$au[,1], ylab="PC1 (A)")
+#plot.bio3d(pc$au[,1], ylab="PC1 (A)")
 ```
 
 and a trajectory along PC1
 ```{r example9}
-view.pca(pc)
+#view.pca(pc)
 ```
 
 Major functions of the package include:

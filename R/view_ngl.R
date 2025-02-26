@@ -171,6 +171,9 @@ view.pdbs <- function(pdbs,
   # Convert to multi-element character vector
   x <- pdbs2string(pdbs, collapse=FALSE)
 
+  # Make sure styles are valid for NGL
+  representation <- style_key_match(representation)
+
   n.pdbs <- length(pdbs$id)
 
   if(is.null(colorScheme)) {
@@ -186,6 +189,7 @@ view.pdbs <- function(pdbs,
     params <- list(color = cols[1])
   } else{
     cols <- NULL
+    colorScheme <- color_key_match(colorScheme)
     #params <- list(colorScheme = "residueindex")
     params <- list(colorScheme = colorScheme)
   }

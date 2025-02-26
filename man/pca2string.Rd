@@ -18,10 +18,10 @@ a character vector of structure data.
 Convert a bio3d PCA or NMA object to a character vector for NGLVieweR input
 }
 \examples{
- pdb <- read.pdb("6s36")
- n <- nma(pdb)
- NGLVieweR::NGLVieweR( pca2string(n), format="pdb") |>
-    NGLVieweR::addRepresentation("cartoon")
+ #pdb <- bio3d::read.pdb("6s36")
+ #n <- bio3d::nma(pdb)
+ #NGLVieweR::NGLVieweR( pca2string(n), format="pdb") |>
+ #   NGLVieweR::addRepresentation("cartoon")
 
  # Or more simpley...
  # view.pdb(n) # Does not work yet!!!

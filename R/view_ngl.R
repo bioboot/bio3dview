@@ -1,7 +1,7 @@
 # Functions for NGL based viewing of bio3d objects
 # 2025-02-14   (11:44:38 PST on Fri, Feb 14)
 #
-# ToDo: view nma/pca  function that makes use of pca2string
+# ToDo: Improve view nma/pca  function that makes use of pca2string
 
 #' Convert a PDB Object to a Character String
 #'
@@ -30,7 +30,7 @@
 #' view.pdb(pdb)
 #'
 pdb2string <- function(pdb, ...) {
-  return( paste(capture.output(
+  return( paste(utils::capture.output(
     bio3d::write.pdb(pdb, file="", ...) ),
       collapse = "\n") )
 }
@@ -58,18 +58,18 @@ pdb2string <- function(pdb, ...) {
 #' @export
 #'
 #' @examples
-#'  # pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-#'  # files <- list.files(path=pth, full.names = T)
-#'  # pdbs <- pdbaln(files, fit=T, exefile="msa")
+#'   pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+#'   files <- list.files(path=pth, full.names = TRUE)
+#'   pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
 #'
-#'  NGLVieweR::NGLVieweR( pdbs2pdb(pdbs), format="pdb") |>
+#'  NGLVieweR::NGLVieweR( bio3d::pdbs2pdb(pdbs), format="pdb") |>
 #'     NGLVieweR::addRepresentation("cartoon")
 #'
 #'  # Or more simpley...
 #'  view.pdbs(pdbs)
 #'  # Trace, tube, line, cartoon, ball+stick
 #'  view.pdbs(pdbs, representation = "trace")
-#'  view.pdbs(pdbs, colors = c("red","blue") )
+#'  view.pdbs(pdbs, cols = c("red","blue") )
 #'  view.pdbs(pdbs, colorScheme = "residueindex")
 #'
 pdbs2string <- function(pdbs, collapse=TRUE) {
@@ -106,17 +106,17 @@ pdbs2string <- function(pdbs, collapse=TRUE) {
 #' @export
 #'
 #' @examples
-#'  pdb <- read.pdb("6s36")
-#'  n <- nma(pdb)
-#'  NGLVieweR::NGLVieweR( pca2string(n), format="pdb") |>
-#'     NGLVieweR::addRepresentation("cartoon")
+#'  #pdb <- bio3d::read.pdb("6s36")
+#'  #n <- bio3d::nma(pdb)
+#'  #NGLVieweR::NGLVieweR( pca2string(n), format="pdb") |>
+#'  #   NGLVieweR::addRepresentation("cartoon")
 #'
 #'  # Or more simpley...
 #'  # view.pdb(n) # Does not work yet!!!
 #'  # view.pdb(n, colorScheme = "residueindex")
 #'
 pca2string <- function(pc, ...) {
-  return( paste(capture.output(
+  return( paste(utils::capture.output(
     bio3d::mktrj(pc, file="", ...)),
       collapse = "\n") )
 }
@@ -151,14 +151,14 @@ pca2string <- function(pc, ...) {
 #' @export
 #'
 #' @examples
-#'  # pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-#'  # files <- list.files(path=pth, full.names = T)
-#'  # pdbs <- pdbaln(files, fit=T, exefile="msa")
+#'   pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+#'   files <- list.files(path=pth, full.names = TRUE)
+#'   pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
 #'
 #'  view.pdbs(pdbs, representation = "cartoon")
 #'  # Trace, tube, line, cartoon, ball+stick
 #'  view.pdbs(pdbs, representation = "trace")
-#'  view.pdbs(pdbs, colors = c("red","blue") )
+#'  view.pdbs(pdbs, cols = c("red","blue") )
 #'  # Perhaps this should be the default?
 #'  view.pdbs(pdbs, colorScheme = "residueindex")
 #'
@@ -224,7 +224,7 @@ view.pdbs <- function(pdbs,
 #' @export
 #'
 #' @examples
-#' pdb <- read.pdb("5p21")
+#' pdb <- bio3d::read.pdb("5p21")
 #' NGLVieweR::NGLVieweR(pdb2ngl(pdb), format="pdb") |>
 #'   NGLVieweR::addRepresentation("cartoon")
 #'
@@ -235,7 +235,15 @@ pdb2ngl <- function(pdb) {
   return( paste(readLines(temp), collapse = "\n") )
 }
 
-
+#' Internal utility function for matching available NGL colorSchemes
+#'
+#' @description
+#' This function is for internal use only. No guarantee is provided for its
+#' stability across package versions.
+#'
+#' @keywords internal
+#'
+#'
 color_key_match <- function(colorScheme) {
   # Make sure only valid NGL colorScheme options are used
   # See http://nglviewer.org/ngl/api/classes/colormaker.html
@@ -279,7 +287,15 @@ color_key_match <- function(colorScheme) {
   return(keyword)
 }
 
-
+#' Internal utility function for matching available NGL representations
+#'
+#' @description
+#' This function is for internal use only. No guarantee is provided for its
+#' stability across package versions.
+#'
+#' @keywords internal
+#'
+#'
 style_key_match <- function(representation) {
   # Make sure only valid NGL representation options are used
   # See http://nglviewer.org/ngl/api/
@@ -382,6 +398,7 @@ style_key_match <- function(representation) {
 #' @param ligand.style the representation style to use for ligands.
 #' @param highlight an optional `atom.select()` object for highlighting.
 #' @param highlight.style the representation style to use for selected `highlight` atoms.
+#' @param water.rm logical, if TRUE water molecules are removed pior to viewing.
 #'
 #' @return an **NGLVieweR** display object that can be displayed or further added to using `NGLVieweR::addRepresentation()` and friends.
 #'
@@ -393,7 +410,7 @@ style_key_match <- function(representation) {
 #' @export
 #'
 #' @examples
-#'  pdb <- read.pdb("1hsg")
+#'  pdb <- bio3d::read.pdb("1hsg")
 #'  view.pdb(pdb)
 #'  view.pdb(pdb, ligand=FALSE, cols=c("pink","aquamarine"))
 #'  view.pdb(pdb, colorScheme = "sstruc")
@@ -401,7 +418,7 @@ style_key_match <- function(representation) {
 #'  #ras <- read.pdb("5p21")
 #'  #view.pdb(ras)
 #'
-#'  sele <- atom.select(pdb, resno=c(25, 50))
+#'  sele <- bio3d::atom.select(pdb, resno=c(25, 50))
 #'  view.pdb(pdb, highlight = sele,
 #'         cols = c("navy","orange"),
 #'         backgroundColor = "pink",
@@ -420,7 +437,7 @@ view.pdb <- function(pdb,
 
   # Should we strip water by default?
   if(water.rm) {
-    pdb <- atom.select(pdb, string="water", inverse=TRUE, value=TRUE)
+    pdb <- bio3d::atom.select(pdb, string="water", inverse=TRUE, value=TRUE)
   }
 
   # Convert to character vector
@@ -459,7 +476,7 @@ view.pdb <- function(pdb,
 
     if(is.numeric(cols)) {
       # Color by number using VMD palette
-      cols <- vmd_colors()[cols]
+      cols <- bio3d::vmd_colors()[cols]
     }
 
     # Names cause JSON/NGL problems
@@ -513,6 +530,25 @@ view.pdb <- function(pdb,
 
 
 
+#' Quick molecular viewing of bio3d PCA results
+#'
+#' @param pc an object of class "pca" as obtained with function `pca.xyz` or `pca`.
+#' @param colorScheme keyword based coloring used only if `cols` input is NULL. Possible values include "residueindex", "modelindex", "sstruc", "bfactor", "chainid", "chainindex", "atomindex", and "occupancy".
+#' @param representation the representation style, useful values are "line", "tube", "cartoon", "trace", "backbone", and "ball+stick".
+#' @param backgroundColor a single element color vector that set the display area background color.
+#' @param ... additional arguments passed to and from functions (e.g. to function `write.pdb`).
+#'
+#' @returns an **NGLVieweR** display object that can be displayed or further added to using `NGLVieweR::addRepresentation()` and friends.
+#'
+#' @author Barry Grant, \email{bjgrant@@ucsd.edu}
+#'
+#' @export
+#'
+#' @examples
+#' #pdb <- bio3d::read.pdb("6s36")
+#' #n <- bio3d::nma(pdb)
+#' #view.nma(n)
+#' #view.nma(n, colorScheme = "model")
 view.pca <- function(pc,
                      colorScheme = "residueindex",
                      representation = "cartoon",
@@ -533,12 +569,16 @@ view.pca <- function(pc,
   return(model)
 }
 
+#' @describeIn view.pca Quick viewing of NMA modes
+#' @export
 view.nma <- view.pca
 
-# Older view.pdb
+#' @describeIn view.pdb An alternative pdb viewer function
+#' @param chain.colors Color vector parameter specific to coloring by chain
+#' @export
 view.old <- function(pdb,
                      ligand=TRUE,
-                     chain.colors=vmd_colors(),
+                     chain.colors=bio3d::vmd_colors(),
                      backgroundColor = "white", # model = NULL
                      highlight=NULL,
                      highlight.style="ball+stick") {
@@ -624,12 +664,12 @@ view.old <- function(pdb,
 #' @export
 #'
 #' @examples
-#'  # pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-#'  # files <- list.files(path=pth, full.names = T)
-#'  # pdbs <- pdbaln(files, fit=T, exefile="msa")
+#'   pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+#'   files <- list.files(path=pth, full.names = TRUE)
+#'   pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
 #'
-#'  view.pdbs(pdbs, representation = "cartoon")
-#'  view.pdbs(pdbs, colors = c("red","blue") )
+#'  view.pdbs2(pdbs, representation = "cartoon")
+#'  view.pdbs2(pdbs, colors = c("red","blue") )
 #'
 view.pdbs2 <- function(pdbs,
                       colors=NULL,
@@ -661,7 +701,7 @@ view.pdbs2 <- function(pdbs,
   # Setup stage and viewer with first pdb
   model <- NGLVieweR::NGLVieweR( pdb2ngl( all.pdbs[[1]] ), format="pdb") |>
     NGLVieweR::stageParameters(backgroundColor = backgroundColor) |>
-    addRepresentation(representation, param = list(color = colors[1]))
+    NGLVieweR::addRepresentation(representation, param = list(color = colors[1]))
 
   # Work through each remaining structure/pdb
   for(k in 2:n.pdbs) {

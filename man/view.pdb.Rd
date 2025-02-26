@@ -2,6 +2,7 @@
 % Please edit documentation in R/view_ngl.R
 \name{view.pdb}
 \alias{view.pdb}
+\alias{view.old}
 \title{Interactive PDB Viewing}
 \usage{
 view.pdb(
@@ -15,6 +16,15 @@ view.pdb(
   highlight = NULL,
   highlight.style = "ball+stick",
   water.rm = FALSE
+)
+
+view.old(
+  pdb,
+  ligand = TRUE,
+  chain.colors = bio3d::vmd_colors(),
+  backgroundColor = "white",
+  highlight = NULL,
+  highlight.style = "ball+stick"
 )
 }
 \arguments{
@@ -35,6 +45,10 @@ view.pdb(
 \item{highlight}{an optional \code{atom.select()} object for highlighting.}
 
 \item{highlight.style}{the representation style to use for selected \code{highlight} atoms.}
+
+\item{water.rm}{logical, if TRUE water molecules are removed pior to viewing.}
+
+\item{chain.colors}{Color vector parameter specific to coloring by chain}
 }
 \value{
 an \strong{NGLVieweR} display object that can be displayed or further added to using \code{NGLVieweR::addRepresentation()} and friends.
@@ -97,8 +111,13 @@ Currently the function does not check for bio3d or NGLVieweR
 availability. It also does not work well with trajectory
 or \code{pdbs} objects. For the later use \code{view.pdbs()}.
 }
+\section{Functions}{
+\itemize{
+\item \code{view.old()}: An alternative pdb viewer function
+
+}}
 \examples{
- pdb <- read.pdb("1hsg")
+ pdb <- bio3d::read.pdb("1hsg")
  view.pdb(pdb)
  view.pdb(pdb, ligand=FALSE, cols=c("pink","aquamarine"))
  view.pdb(pdb, colorScheme = "sstruc")
@@ -106,7 +125,7 @@ or \code{pdbs} objects. For the later use \code{view.pdbs()}.
  #ras <- read.pdb("5p21")
  #view.pdb(ras)
 
- sele <- atom.select(pdb, resno=c(25, 50))
+ sele <- bio3d::atom.select(pdb, resno=c(25, 50))
  view.pdb(pdb, highlight = sele,
         cols = c("navy","orange"),
         backgroundColor = "pink",

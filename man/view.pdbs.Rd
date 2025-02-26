@@ -39,14 +39,14 @@ but often overkill for a quick inspection) or write many lines of \strong{NGLVie
 code that loop through all structures in a given \code{pdbs} object.
 }
 \examples{
- # pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
- # files <- list.files(path=pth, full.names = T)
- # pdbs <- pdbaln(files, fit=T, exefile="msa")
+  pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+  files <- list.files(path=pth, full.names = TRUE)
+  pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
 
  view.pdbs(pdbs, representation = "cartoon")
  # Trace, tube, line, cartoon, ball+stick
  view.pdbs(pdbs, representation = "trace")
- view.pdbs(pdbs, colors = c("red","blue") )
+ view.pdbs(pdbs, cols = c("red","blue") )
  # Perhaps this should be the default?
  view.pdbs(pdbs, colorScheme = "residueindex")
 

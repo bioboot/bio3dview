@@ -16,7 +16,7 @@ a single element character vector with return characters as required by \code{NG
 Function to take a bio3d structure and use in the NGLVieweR package.
 }
 \examples{
-pdb <- read.pdb("5p21")
+pdb <- bio3d::read.pdb("5p21")
 NGLVieweR::NGLVieweR(pdb2ngl(pdb), format="pdb") |>
   NGLVieweR::addRepresentation("cartoon")
 

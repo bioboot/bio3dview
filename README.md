@@ -1,8 +1,7 @@
+Bio3DView
+================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# bio3dview
-
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -29,76 +28,68 @@ install.packages("bio3d")
 install.packages("NGLVieweR")
 ```
 
-## Example
+## Examples
 
-Generate a quick NGL (webGL based) structure overview of bio3d pdb class
-objects with a number of simple defaults. The returned NGLVieweR object
-can be further added to for custom interactive visualizations.
+**1**. First let’s generate a quick NGL (webGL based) structure overview
+of a bio3d pdb class object with a number of simple defaults. The
+returned NGLVieweR object can be further added to for custom interactive
+visualizations:
 
 ``` r
 library(bio3dview)
 library(bio3d)
 library(NGLVieweR)
 
-pdb <- read.pdb("1hsg")
-#>   Note: Accessing on-line PDB file
-#view.pdb(pdb)
+pdb <- read.pdb("5p21")
+view.pdb(pdb) |>
+  setSpin()
 ```
+
+<figure>
+<img src="man/figures/fig1a.gif"
+alt="Figure 1. Structure of HRas PDB code: 5p21. Note that the image here is not interactive due to restrictions with GitHub GFM format." />
+<figcaption aria-hidden="true"><strong>Figure 1</strong>. Structure of
+HRas PDB code: 5p21. <em>Note that the image here is not interactive due
+to restrictions with GitHub GFM format.</em></figcaption>
+</figure>
+
+**2.** Here we generate a quick interactive multi-structure ensemble
+view of a bio3d `pdbs` object:
 
 ``` r
-#htmlwidgets::saveWidget(v, "man/figures/temp.html")
-#webshot2::webshot("man/figures/temp.html", "man/figures/README-screenshot.png", delay = 0.5)
+data(transducin)
+
+view.pdbs(transducin$pdbs, colorScheme = "res") 
 ```
+
+<figure>
+<img src="man/figures/fig2.png"
+alt="Figure 2. All 53 PDB structures of Transducin colored by residue index" />
+<figcaption aria-hidden="true"><strong>Figure 2.</strong> All 53 PDB
+structures of Transducin colored by residue index</figcaption>
+</figure>
+
+**3.** As a final example let’s perform a Normal Mode Analysis (NMA) and
+view the predicted large scale motions:
 
 ``` r
-#view.pdb(pdb, ligand=FALSE, cols=c("pink","aquamarine"))
+adk <- read.pdb("6s36")
+m <- nma(adk)
+view.nma(m, pdb=adk) |>
+  setPlay()
 ```
 
-``` r
-#view.pdb(pdb, colorScheme = "sstruc", backgroundColor = "black")
-```
+<figure>
+<img src="man/figures/fig3.gif"
+alt="Figure 3. Predicted large scale domai motions of Adenalate kinase froma a quick bio3d based Normal Mode Analysis." />
+<figcaption aria-hidden="true"><strong>Figure 3.</strong> Predicted
+large scale domai motions of Adenalate kinase froma a quick bio3d based
+Normal Mode Analysis.</figcaption>
+</figure>
 
-``` r
-sele <- atom.select(pdb, resno=c(25, 50))
-#view.pdb(pdb, highlight = sele,
-#        cols = c("navy","orange"),
-#        backgroundColor = "pink",
-#        highlight.style = "spacefill")
-```
+## Going deeper
 
-Quick interactive multi-structure ensemble bio3d pdbs object viewing
-using the NGLVieweR package.
-
-``` r
-#pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-#files <- list.files(path=pth, full.names = TRUE)
-#pdbs <- pdbaln(files, fit=TRUE, exefile="msa")
-
-#view.pdbs(pdbs, representation = "cartoon")
-```
-
-``` r
-#view.pdbs(pdbs, colorScheme = "residueindex")
-```
-
-And a PCA analysis result
-
-``` r
-#pc <- pca(pdbs)
-
-# Plot a single conformer plot of PC1 v PC2
-#plot(pc, pc.axes = 1:2)
-```
-
-``` r
-## Plot atom wise loadings
-#plot.bio3d(pc$au[,1], ylab="PC1 (A)")
-```
-
-and a trajectory along PC1
-
-``` r
-#view.pca(pc)
-```
-
-Major functions of the package include:
+There are many, many more options for customized viewing options
+available. Further examples can be found on our [getting started
+article]() with full details documented within in the individual
+functions [help pages]().

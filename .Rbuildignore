@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 aln.fa
 ^README\.Rmd$
+^vignettes/articles$

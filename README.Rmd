@@ -36,9 +36,9 @@ install.packages("NGLVieweR")
 ```
 
 
-## Examples
+## Example 1
 
-**1**. First let's generate a quick NGL (webGL based) structure overview of a bio3d pdb class object with a number of simple defaults. The returned NGLVieweR object can be further added to for custom interactive visualizations:
+First let's load up the packages and generate a quick NGL (webGL based) structure overview of a bio3d pdb class object with a number of simple defaults. The returned NGLVieweR object can be further added to for custom interactive visualizations:
 
 ```{r example1, warning=FALSE, eval=FALSE}
 library(bio3dview)
@@ -52,7 +52,8 @@ view.pdb(pdb) |>
 
 ![**Figure 1**. Structure of HRas PDB code: 5p21. *Note that the image here is not interactive due to restrictions with GitHub GFM format.*](man/figures/fig1a.gif)
 
-**2.** Here we generate a quick interactive multi-structure ensemble view of a bio3d `pdbs` object:
+## Example 2.
+Here we generate a quick interactive multi-structure ensemble view of a bio3d `pdbs` object:
 
 ```{r example2, eval=FALSE}
 data(transducin)
@@ -62,7 +63,8 @@ view.pdbs(transducin$pdbs, colorScheme = "res")
 
 ![**Figure 2.** All 53 PDB structures of Transducin colored by residue index](man/figures/fig2.png) 
 
-**3.** As a final example let's perform a Normal Mode Analysis (NMA) and view the predicted large scale motions:
+## Example 3.
+As a final example let's perform a quick Normal Mode Analysis (NMA) and view the predicted large scale motions:
 
 ```{r, eval=FALSE}
 adk <- read.pdb("6s36")
@@ -71,9 +73,9 @@ view.nma(m, pdb=adk) |>
   setPlay()
 ```
 
-![**Figure 3.** Predicted large scale domai motions of Adenalate kinase froma a quick bio3d based Normal Mode Analysis.](man/figures/fig3.gif)
+![**Figure 3.** Predicted large scale domain motions of Adenalate kinase from a  bio3d based Normal Mode Analysis.](man/figures/fig3.gif)
 
-## Going deeper
+## Going further
 
 There are many, many more options for customized viewing options available. Further examples can be found on our [getting started article]() with full details documented within in the individual functions [help pages]().
 

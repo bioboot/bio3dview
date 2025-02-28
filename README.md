@@ -28,12 +28,12 @@ install.packages("bio3d")
 install.packages("NGLVieweR")
 ```
 
-## Examples
+## Example 1
 
-**1**. First let’s generate a quick NGL (webGL based) structure overview
-of a bio3d pdb class object with a number of simple defaults. The
-returned NGLVieweR object can be further added to for custom interactive
-visualizations:
+First let’s load up the packages and generate a quick NGL (webGL based)
+structure overview of a bio3d pdb class object with a number of simple
+defaults. The returned NGLVieweR object can be further added to for
+custom interactive visualizations:
 
 ``` r
 library(bio3dview)
@@ -53,8 +53,10 @@ HRas PDB code: 5p21. <em>Note that the image here is not interactive due
 to restrictions with GitHub GFM format.</em></figcaption>
 </figure>
 
-**2.** Here we generate a quick interactive multi-structure ensemble
-view of a bio3d `pdbs` object:
+## Example 2.
+
+Here we generate a quick interactive multi-structure ensemble view of a
+bio3d `pdbs` object:
 
 ``` r
 data(transducin)
@@ -69,7 +71,9 @@ alt="Figure 2. All 53 PDB structures of Transducin colored by residue index" />
 structures of Transducin colored by residue index</figcaption>
 </figure>
 
-**3.** As a final example let’s perform a Normal Mode Analysis (NMA) and
+## Example 3.
+
+As a final example let’s perform a quick Normal Mode Analysis (NMA) and
 view the predicted large scale motions:
 
 ``` r
@@ -81,13 +85,13 @@ view.nma(m, pdb=adk) |>
 
 <figure>
 <img src="man/figures/fig3.gif"
-alt="Figure 3. Predicted large scale domai motions of Adenalate kinase froma a quick bio3d based Normal Mode Analysis." />
+alt="Figure 3. Predicted large scale domain motions of Adenalate kinase from a bio3d based Normal Mode Analysis." />
 <figcaption aria-hidden="true"><strong>Figure 3.</strong> Predicted
-large scale domai motions of Adenalate kinase froma a quick bio3d based
-Normal Mode Analysis.</figcaption>
+large scale domain motions of Adenalate kinase from a bio3d based Normal
+Mode Analysis.</figcaption>
 </figure>
 
-## Going deeper
+## Going further
 
 There are many, many more options for customized viewing options
 available. Further examples can be found on our [getting started

@@ -1,0 +1,10 @@
+pandoc: '3.2'
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  bio3dview: bio3dview.html
+  articles/getting_started: getting_started.html
+last_built: 2025-03-01T22:40Z
+urls:
+  reference: https://bioboot.github.io/bio3dview/reference
+  article: https://bioboot.github.io/bio3dview/articles

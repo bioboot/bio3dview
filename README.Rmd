@@ -1,5 +1,4 @@
 ---
-title: Bio3DView
 output: github_document
 ---
 
@@ -13,6 +12,8 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+
+## Bio3DView <img src="man/figures/bio3d-logo.png" style="width: 50%;" align="right" />
 
 <!-- badges: start -->
 <!-- badges: end -->

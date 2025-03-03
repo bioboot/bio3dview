@@ -1,0 +1,4 @@
+url: https://bioboot.github.io/bio3dview/
+template:
+  bootstrap: 5
+  bootswatch: yeti

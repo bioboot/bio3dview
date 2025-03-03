@@ -1,7 +1,8 @@
-Bio3DView
-================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+## Bio3DView <img src="man/figures/bio3d-logo.png" style="width: 50%;" align="right" />
+
 <!-- badges: start -->
 <!-- badges: end -->
 

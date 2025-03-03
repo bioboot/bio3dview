@@ -1,18 +1,19 @@
 Package: bio3dview
 Type: Package
-Title: Interactive 3D viewing of Bio3D objects 
+Title: Interactive Visualization of Biomolecular Structure Data 
 Version: 0.0.1
 Authors@R: c(
     person(
       "Barry", "Grant",
       email = "bjgrant@ucsd.edu",
-      role = c("aut", "cre")
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-2215-4196")
     )
   )
-Description: Functions to link bio3d to the NGLVieweR package and thereby enable
-  interactive molecular graphics of single or multi-model PDB objects, ensembles 
-  of aligned PDBs (multi-structre PDB sets) and the outputs of PCA, NMA, 
-  trajectory analysis etc.
+Description: Generate attractive interactive molecular graphics from 'bio3d' 
+  objects using minimal code. Major functions link 'bio3d' to the 'NGLVieweR' 
+  package enabling the display of biomolecular structure analysis results in 
+  the R console, in quarto/R Markdown documents, and in Shiny web applications.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -26,4 +27,6 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown
-URL: https://bioboot.github.io/bio3dview/
+URL: https://bioboot.github.io/bio3dview/, https://github.com/bioboot/bio3dview, 
+  http://thegrantlab.org/bio3d/
+BugReports: https://github.com/bioboot/bio3dview/issues

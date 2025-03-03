@@ -22,24 +22,23 @@ Interactive biomolecular structure visualization of [bio3d](http://thegrantlab.o
 
 ## Installation
 
-You can install the development version of bio3dview from [GitHub](https://github.com/bioboot/bio3dview) with:
+To install the development version of bio3dview from [GitHub](https://github.com/bioboot/bio3dview), use:
 
 ``` r
 # install.packages("pak")
 pak::pak("bioboot/bio3dview")
 ```
 
-Dependencies include the R CRAN packages [bio3d](https://cran.r-project.org/web/packages/bio3d/index.html) and [NGLVieweR](https://cran.r-project.org/web/packages/NGLVieweR/), which can be installed from CRAN with:
+Dependencies include the R CRAN packages [bio3d](https://cran.r-project.org/web/packages/bio3d/index.html) and [NGLVieweR](https://cran.r-project.org/web/packages/NGLVieweR/), which can be installed with:
 
 ``` r
 install.packages("bio3d")
 install.packages("NGLVieweR")
 ```
 
+## Example 1: Basic Structure Visualization
 
-## Example 1
-
-First let's load up the packages and generate a quick NGL (webGL based) structure overview of a bio3d pdb class object with a number of simple defaults. The returned NGLVieweR object can be further added to for custom interactive visualizations:
+First let's load up the packages and generate a quick NGL (webGL based) structure overview of a bio3d `pdb` class object with a number of simple defaults. The returned NGLVieweR object can be further added to for custom interactive visualizations:
 
 ```{r example1, warning=FALSE, eval=FALSE}
 library(bio3dview)
@@ -53,8 +52,10 @@ view.pdb(pdb) |>
 
 ![**Figure 1**. Structure of HRas PDB code: 5p21. *Note that the image here is not interactive due to restrictions with GitHub GFM format.*](man/figures/fig1a.gif)
 
-## Example 2.
-Here we generate a quick interactive multi-structure ensemble view of a bio3d `pdbs` object:
+
+## Example 2: Visualizing a Multi-Structure Ensemble
+
+Generate an interactive view of a bio3d `pdbs` object containing multiple structures:
 
 ```{r example2, eval=FALSE}
 data(transducin)
@@ -64,8 +65,8 @@ view.pdbs(transducin$pdbs, colorScheme = "res")
 
 ![**Figure 2.** All 53 PDB structures of Transducin colored by residue index](man/figures/fig2.png) 
 
-## Example 3.
-As a final example let's perform a quick Normal Mode Analysis (NMA) and view the predicted large scale motions:
+## Example 3: NMA Visualization
+Perform a quick Normal Mode Analysis (NMA) and visualize the predicted large-scale domain motions:
 
 ```{r, eval=FALSE}
 adk <- read.pdb("6s36")
@@ -78,5 +79,5 @@ view.nma(m, pdb=adk) |>
 
 ## Going further
 
-There are many, many more options for customized viewing options available. Further examples can be found on our [getting started article]() with full details documented within in the individual functions [help pages]().
+Many additional visualization options are available. Check out the [Getting Started vignette](https://bioboot.github.io/bio3dview/articles/bio3dview.html) for more examples, or refer to individual function [help pages](https://bioboot.github.io/bio3dview/reference/index.html) for detailed documentation.
 

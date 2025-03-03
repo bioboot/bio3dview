@@ -11,8 +11,8 @@ Interactive biomolecular structure visualization of
 
 ## Installation
 
-You can install the development version of bio3dview from
-[GitHub](https://github.com/bioboot/bio3dview) with:
+To install the development version of bio3dview from
+[GitHub](https://github.com/bioboot/bio3dview), use:
 
 ``` r
 # install.packages("pak")
@@ -22,17 +22,17 @@ pak::pak("bioboot/bio3dview")
 Dependencies include the R CRAN packages
 [bio3d](https://cran.r-project.org/web/packages/bio3d/index.html) and
 [NGLVieweR](https://cran.r-project.org/web/packages/NGLVieweR/), which
-can be installed from CRAN with:
+can be installed with:
 
 ``` r
 install.packages("bio3d")
 install.packages("NGLVieweR")
 ```
 
-## Example 1
+## Example 1: Basic Structure Visualization
 
 First let’s load up the packages and generate a quick NGL (webGL based)
-structure overview of a bio3d pdb class object with a number of simple
+structure overview of a bio3d `pdb` class object with a number of simple
 defaults. The returned NGLVieweR object can be further added to for
 custom interactive visualizations:
 
@@ -54,10 +54,10 @@ HRas PDB code: 5p21. <em>Note that the image here is not interactive due
 to restrictions with GitHub GFM format.</em></figcaption>
 </figure>
 
-## Example 2.
+## Example 2: Visualizing a Multi-Structure Ensemble
 
-Here we generate a quick interactive multi-structure ensemble view of a
-bio3d `pdbs` object:
+Generate an interactive view of a bio3d `pdbs` object containing
+multiple structures:
 
 ``` r
 data(transducin)
@@ -72,10 +72,10 @@ alt="Figure 2. All 53 PDB structures of Transducin colored by residue index" />
 structures of Transducin colored by residue index</figcaption>
 </figure>
 
-## Example 3.
+## Example 3: NMA Visualization
 
-As a final example let’s perform a quick Normal Mode Analysis (NMA) and
-view the predicted large scale motions:
+Perform a quick Normal Mode Analysis (NMA) and visualize the predicted
+large-scale domain motions:
 
 ``` r
 adk <- read.pdb("6s36")
@@ -94,7 +94,9 @@ Mode Analysis.</figcaption>
 
 ## Going further
 
-There are many, many more options for customized viewing options
-available. Further examples can be found on our [getting started
-article]() with full details documented within in the individual
-functions [help pages]().
+Many additional visualization options are available. Check out the
+[Getting Started
+vignette](https://bioboot.github.io/bio3dview/articles/bio3dview.html)
+for more examples, or refer to individual function [help
+pages](https://bioboot.github.io/bio3dview/reference/index.html) for
+detailed documentation.

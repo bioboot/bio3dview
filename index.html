@@ -5,20 +5,20 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Interactive 3D viewing of Bio3D objects • bio3dview</title>
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Interactive Visualization of Biomolecular Structure Data • bio3dview</title>
+<script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Interactive 3D viewing of Bio3D objects">
-<meta name="description" content="Functions to link bio3d to the NGLVieweR package and thereby enable interactive molecular graphics of single or multi-model PDB objects, ensembles of aligned PDBs (multi-structre PDB sets) and the outputs of PCA, NMA, trajectory analysis etc.">
-<meta property="og:description" content="Functions to link bio3d to the NGLVieweR package and thereby enable interactive molecular graphics of single or multi-model PDB objects, ensembles of aligned PDBs (multi-structre PDB sets) and the outputs of PCA, NMA, trajectory analysis etc.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Interactive Visualization of Biomolecular Structure Data">
+<meta name="description" content="Generate attractive interactive molecular graphics from bio3d objects using minimal code. Major functions link bio3d to the NGLVieweR package enabling the display of biomolecular structure analysis results in the R console, in quarto/R Markdown documents, and in Shiny web applications.">
+<meta property="og:description" content="Generate attractive interactive molecular graphics from bio3d objects using minimal code. Major functions link bio3d to the NGLVieweR package enabling the display of biomolecular structure analysis results in the R console, in quarto/R Markdown documents, and in Shiny web applications.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">bio3dview</a>
 
@@ -38,6 +38,15 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/bioboot/bio3dview/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -46,7 +55,7 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level2">
-<h2 id="bio3dview-">Bio3DView <img src="reference/figures/bio3d-logo.png" align="right"><a class="anchor" aria-label="anchor" href="#bio3dview-"></a>
+<h2 id="bio3dview-">Bio3DView <img src="reference/figures/bio3d-logo.png" alt="" align="right"><a class="anchor" aria-label="anchor" href="#bio3dview-"></a>
 </h2>
 <!-- badges: start -->
 <!-- badges: end -->
@@ -55,21 +64,21 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of bio3dview from <a href="https://github.com/bioboot/bio3dview" class="external-link">GitHub</a> with:</p>
+<p>To install the development version of bio3dview from <a href="https://github.com/bioboot/bio3dview" class="external-link">GitHub</a>, use:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"bioboot/bio3dview"</span><span class="op">)</span></span></code></pre></div>
-<p>Dependencies include the R CRAN packages <a href="https://cran.r-project.org/web/packages/bio3d/index.html" class="external-link">bio3d</a> and <a href="https://cran.r-project.org/web/packages/NGLVieweR/" class="external-link">NGLVieweR</a>, which can be installed from CRAN with:</p>
+<p>Dependencies include the R CRAN packages <a href="https://cran.r-project.org/web/packages/bio3d/index.html" class="external-link">bio3d</a> and <a href="https://cran.r-project.org/web/packages/NGLVieweR/" class="external-link">NGLVieweR</a>, which can be installed with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"bio3d"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"NGLVieweR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example-1">Example 1<a class="anchor" aria-label="anchor" href="#example-1"></a>
+<h2 id="example-1-basic-structure-visualization">Example 1: Basic Structure Visualization<a class="anchor" aria-label="anchor" href="#example-1-basic-structure-visualization"></a>
 </h2>
-<p>First let’s load up the packages and generate a quick NGL (webGL based) structure overview of a bio3d pdb class object with a number of simple defaults. The returned NGLVieweR object can be further added to for custom interactive visualizations:</p>
+<p>First let’s load up the packages and generate a quick NGL (webGL based) structure overview of a bio3d <code>pdb</code> class object with a number of simple defaults. The returned NGLVieweR object can be further added to for custom interactive visualizations:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">bio3dview</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioboot.github.io/bio3dview/">bio3dview</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://thegrantlab.org/bio3d/" class="external-link">bio3d</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nvelden/NGLVieweR" class="external-link">NGLVieweR</a></span><span class="op">)</span></span>
 <span></span>
@@ -80,9 +89,9 @@
 </figcaption></figure>
 </div>
 <div class="section level2">
-<h2 id="example-2">Example 2.<a class="anchor" aria-label="anchor" href="#example-2"></a>
+<h2 id="example-2-visualizing-a-multi-structure-ensemble">Example 2: Visualizing a Multi-Structure Ensemble<a class="anchor" aria-label="anchor" href="#example-2-visualizing-a-multi-structure-ensemble"></a>
 </h2>
-<p>Here we generate a quick interactive multi-structure ensemble view of a bio3d <code>pdbs</code> object:</p>
+<p>Generate an interactive view of a bio3d <code>pdbs</code> object containing multiple structures:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">transducin</span><span class="op">)</span></span>
 <span></span>
@@ -91,9 +100,9 @@
 </figcaption></figure>
 </div>
 <div class="section level2">
-<h2 id="example-3">Example 3.<a class="anchor" aria-label="anchor" href="#example-3"></a>
+<h2 id="example-3-nma-visualization">Example 3: NMA Visualization<a class="anchor" aria-label="anchor" href="#example-3-nma-visualization"></a>
 </h2>
-<p>As a final example let’s perform a quick Normal Mode Analysis (NMA) and view the predicted large scale motions:</p>
+<p>Perform a quick Normal Mode Analysis (NMA) and visualize the predicted large-scale domain motions:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adk</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://thegrantlab.org/bio3d/reference/read.pdb.html" class="external-link">read.pdb</a></span><span class="op">(</span><span class="st">"6s36"</span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://thegrantlab.org/bio3d/reference/nma.html" class="external-link">nma</a></span><span class="op">(</span><span class="va">adk</span><span class="op">)</span></span>
@@ -105,10 +114,18 @@
 <div class="section level2">
 <h2 id="going-further">Going further<a class="anchor" aria-label="anchor" href="#going-further"></a>
 </h2>
-<p>There are many, many more options for customized viewing options available. Further examples can be found on our <a href="">getting started article</a> with full details documented within in the individual functions <a href="">help pages</a>.</p>
+<p>Many additional visualization options are available. Check out the <a href="https://bioboot.github.io/bio3dview/articles/bio3dview.html">Getting Started vignette</a> for more examples, or refer to individual function <a href="https://bioboot.github.io/bio3dview/reference/index.html">help pages</a> for detailed documentation.</p>
 </div>
 
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/bioboot/bio3dview/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/bioboot/bio3dview/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>GPL (&gt;= 3)</li>
@@ -126,7 +143,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Barry Grant <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Barry Grant <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-2215-4196" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 

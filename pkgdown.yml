@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   bio3dview: bio3dview.html
-last_built: 2025-03-03T05:22Z
+last_built: 2025-03-03T19:54Z
 urls:
   reference: https://bioboot.github.io/bio3dview/reference
   article: https://bioboot.github.io/bio3dview/articles

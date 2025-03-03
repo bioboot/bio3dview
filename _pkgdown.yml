@@ -2,3 +2,34 @@ url: https://bioboot.github.io/bio3dview/
 template:
   bootstrap: 5
   bootswatch: yeti
+  light-switch: true
+
+reference:
+- title: Key functions
+- subtitle: The main view functions
+  desc: These functions are used to generate 3D views of distinct
+      bio3d objects and their related or derived data.
+- contents:
+  - view.pdb
+  - view.pdbs
+  - view.pca
+  - view.nma
+- title: Utility functions
+- subtitle: Conversion functions
+  desc: These functions are used to convert bio3 objects for input to
+      NGLVieweR.
+- contents:
+  - pdb2string
+  - pdbs2string
+  - pca2string
+
+- subtitle: Internal functions
+  desc: These functions are used to check user specified color and graphic
+      representation style keyword options against those allowed by NGL.
+- contents:
+  - color_key_match
+  - style_key_match
+
+- title: Deprecated functions
+- contents:
+  - has_lifecycle("deprecated")

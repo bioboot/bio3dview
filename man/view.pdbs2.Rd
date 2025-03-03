@@ -24,13 +24,19 @@ view.pdbs2(
 an \strong{NGLVieweR} display object that can be displayed or further added to using \code{NGLVieweR::addRepresentation()} and friends.
 }
 \description{
-Quick interactive PDBS object viewing using NGLVieweR
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+Please use \code{view.pdbs()} instead.
 }
 \examples{
-  pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-  files <- list.files(path=pth, full.names = TRUE)
-  pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
+  #pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+  #files <- list.files(path=pth, full.names = TRUE)
+  #pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
 
+ data(transducin, package="bio3d")
+ attach(transducin)
+
+ view.pdbs2(pdbs)
  view.pdbs2(pdbs, representation = "cartoon")
  view.pdbs2(pdbs, colors = c("red","blue") )
 
@@ -41,3 +47,4 @@ Quick interactive PDBS object viewing using NGLVieweR
 \author{
 Barry Grant, \email{bjgrant@ucsd.edu}
 }
+\keyword{internal}

@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Bio3DView <img src="man/figures/bio3d-logo.png" align="right" />
+## Bio3DView <img src="man/figures/bio3d-logo.png" alt="" align="right" />
 
 <!-- badges: start -->
 <!-- badges: end -->

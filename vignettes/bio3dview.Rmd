@@ -293,7 +293,9 @@ More modern visualization packages in R include [r3dmol](https://github.com/swso
 
 ## References
 
-- **Bio3D**: Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696.
+- **Bio3D**: Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696. <http://thegrantlab.org/bio3d/>
+
+- **Bio3DView**: Grant B (2025). bio3dview: Interactive 3D viewing of Bio3D objects. R package version 0.0.1, <https://bioboot.github.io/bio3dview/>.
 
 - **Rpdb**: Ide, J (2023) _Read, Write, Visualize and Manipulate PDB Files_. R package version 2.3.4, <https://CRAN.R-project.org/package=Rpdb>. 
 

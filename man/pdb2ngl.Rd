@@ -13,6 +13,10 @@ pdb2ngl(pdb)
 a single element character vector with return characters as required by \code{NGLVieweR::NGLVieweR()} function with \code{format=pdb} option.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+}
+\details{
+Please use \code{pdb2string()} instead.
 Function to take a bio3d structure and use in the NGLVieweR package.
 }
 \examples{
@@ -27,3 +31,4 @@ NGLVieweR::NGLVieweR(pdb2ngl(pdb), format="pdb") |>
 \author{
 Barry Grant, \email{bjgrant@ucsd.edu}
 }
+\keyword{internal}

@@ -12,7 +12,9 @@
 #' @param pdb a bio3d pdb object as obtained from `read.pdb()`.
 #' @param ... Extra arguments that are passed to `write.pdb()`.
 #'
-#' @return a single element character vector with return characters as required by `NGLVieweR::NGLVieweR()` function with `format=pdb` option. Note that no intermediate files are pro
+#' @return a single element character vector with return characters as required
+#'   by `NGLVieweR::NGLVieweR()` function with `format=pdb` option. Note that
+#'   no intermediate files are produced.
 #'
 #' @author Barry Grant, \email{bjgrant@@ucsd.edu}
 #'
@@ -58,9 +60,12 @@ pdb2string <- function(pdb, ...) {
 #' @export
 #'
 #' @examples
-#'   pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-#'   files <- list.files(path=pth, full.names = TRUE)
-#'   pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
+#'   #pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+#'   #files <- list.files(path=pth, full.names = TRUE)
+#'   #pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
+#'
+#'  data(transducin, package="bio3d")
+#'  attach(transducin)
 #'
 #'  NGLVieweR::NGLVieweR( bio3d::pdbs2pdb(pdbs), format="pdb") |>
 #'     NGLVieweR::addRepresentation("cartoon")
@@ -151,10 +156,14 @@ pca2string <- function(pc, ...) {
 #' @export
 #'
 #' @examples
-#'   pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-#'   files <- list.files(path=pth, full.names = TRUE)
-#'   pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
+#'   #pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+#'   #files <- list.files(path=pth, full.names = TRUE)
+#'   #pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
 #'
+#'  data(transducin, package="bio3d")
+#'  attach(transducin)
+#'
+#'  view.pdbs(pdbs)
 #'  view.pdbs(pdbs, representation = "cartoon")
 #'  # Trace, tube, line, cartoon, ball+stick
 #'  view.pdbs(pdbs, representation = "trace")
@@ -215,6 +224,9 @@ view.pdbs <- function(pdbs,
 
 #' Convert a bio3d PDB object for NGLVieweR
 #'
+#' `r lifecycle::badge("deprecated")`
+#'
+#' Please use `pdb2string()` instead.
 #' Function to take a bio3d structure and use in the NGLVieweR package.
 #'
 #' @param pdb a bio3d pdb object as obtained from `read.pdb()`.
@@ -226,7 +238,7 @@ view.pdbs <- function(pdbs,
 #' @seealso \code{view.pdb()} which uses this function internally, \code{NGLVieweR::NGLVieweR()}, \code{bio3d::read.pdb()}.
 #'
 #' @export
-#'
+#' @keywords internal
 #' @examples
 #' pdb <- bio3d::read.pdb("5p21")
 #' NGLVieweR::NGLVieweR(pdb2ngl(pdb), format="pdb") |>
@@ -654,6 +666,11 @@ view.old <- function(pdb,
 
 #' Quick interactive PDBS object viewing using NGLVieweR
 #'
+#'@description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' Please use `view.pdbs()` instead.
+#'
 #' @param pdbs a multi-structure `pdbs` object as obtained from `pdbaln()`, `read.fasta.pdb()`, etc.
 #' @param colors a vector of colors for each structure. If NULL then the output of `vmd.colors()` is used.
 #' @param representation the representation style, usefull values are lines, tube and cartoon.
@@ -666,12 +683,16 @@ view.old <- function(pdb,
 #' @seealso \code{view.pdb()}, \code{pdb2ngl()}, \code{NGLVieweR::NGLVieweR()}, \code{bio3d::read.pdb()}
 #'
 #' @export
-#'
+#' @keywords internal
 #' @examples
-#'   pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-#'   files <- list.files(path=pth, full.names = TRUE)
-#'   pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
+#'   #pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+#'   #files <- list.files(path=pth, full.names = TRUE)
+#'   #pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
 #'
+#'  data(transducin, package="bio3d")
+#'  attach(transducin)
+#'
+#'  view.pdbs2(pdbs)
 #'  view.pdbs2(pdbs, representation = "cartoon")
 #'  view.pdbs2(pdbs, colors = c("red","blue") )
 #'

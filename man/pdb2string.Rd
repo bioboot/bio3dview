@@ -12,7 +12,9 @@ pdb2string(pdb, ...)
 \item{...}{Extra arguments that are passed to \code{write.pdb()}.}
 }
 \value{
-a single element character vector with return characters as required by \code{NGLVieweR::NGLVieweR()} function with \code{format=pdb} option. Note that no intermediate files are pro
+a single element character vector with return characters as required
+by \code{NGLVieweR::NGLVieweR()} function with \code{format=pdb} option. Note that
+no intermediate files are produced.
 }
 \description{
 Function to take a \strong{bio3d} \code{pdb} structure object and convert it to a single

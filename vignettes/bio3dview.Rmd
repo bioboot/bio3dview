@@ -17,12 +17,20 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-[Bio3DView](https://github.com/bioboot/bio3dview) is an R package for biomolecular structure visualization. It is intended to complement the main [Bio3D](http://thegrantlab.org/bio3d/) structural analysis package and the [NGLVieweR](https://nvelden.github.io/NGLVieweR/) visualization package.
+[Bio3DView](https://github.com/bioboot/bio3dview) is an R package for biomolecular structure visualization. It is designed to complement the [Bio3D](http://thegrantlab.org/bio3d/) structural analysis package and the [NGLVieweR](https://nvelden.github.io/NGLVieweR/) visualization package.
 
 
 ## Features 
 
-Major features include the ability to interactively view biomolecular structures (`pdb` objects from the Bio3D package), structural ensembles (`pdbs` objects) as well as the results of Normal Mode Analysis (`nma` objects), Principal Component Analysis (`pca` objects) and various types of computed dynamic trajectory data (`xyz` objects). All while using minimal code and sensible defaults.
+Major features include:
+
+- Sensible and attractive defaults with minimal coding requirements,
+- Interactive visualization of biomolecular structures (`pdb` and related objects from Bio3D),
+- Visualization of structural ensembles (`pdbs` objects),
+- Molecular visualization of Principal Component Analysis results (`pca` objects).
+- Interactive rendering of Normal Mode Analysis results (`nma` objects),
+- Support for various computed dynamic trajectory data (`xyz` objects).
+
 
 
 ## Installation
@@ -34,7 +42,7 @@ This bio3dview package is not yet on CRAN but can be installed from [GitHub](htt
 pak::pak("bioboot/bio3dview")
 ```
 
-Dependencies include the CRAN packages [bio3d](https://cran.r-project.org/web/packages/bio3d/index.html) and [NGLVieweR](https://cran.r-project.org/web/packages/NGLVieweR/), which can be installed from CRAN with:
+Dependencies include  [bio3d](https://cran.r-project.org/web/packages/bio3d/index.html) and [NGLVieweR](https://cran.r-project.org/web/packages/NGLVieweR/) packages, which can be installed from CRAN with:
 
 ``` r
 install.packages("bio3d")
@@ -51,7 +59,14 @@ library(bio3d)
 library(NGLVieweR)
 ```
 
-One then loads, analyzes or derives data with **bio3d** functions, *views* this data with **bio3dview** functions, and optionally adds extra customization with **NGLVieweR** functions.
+The workflow generally follows these steps:
+
+1.  **Read**, analyze or compute data using **Bio3D** functions.
+
+2.  **View** resulting data with **Bio3DView** functions.
+
+3.  **Add** optional extra customization with **NGLVieweR** functions.
+
 
 For example, let's begin with reading an online PDB structure of HRas (with PDB code: 5p21 using `bio3d::read.pdb()`. Then generate the default 3D view with `bio3dview::view.pdb()` (rainbow colored protein cartoon with bound nucleotide ligand and ions highlighted in atom colored licorice representation). Finally, set it all spinning with `NGLVieweR::setSpin()`:
 
@@ -64,15 +79,15 @@ view.pdb(ras) |>
 
 ## Key functions
 
-All the key functions of this package are all named **`view.___()`**, these include:
+All the key functions of this package are all named **`view.<object>()`**, these include:
 
 - `view.pdb()` - for interactive PDB viewing, 
-- `view.pdbs()` - for interactive PDBS viewing, 
+- `view.pdbs()` - for interactive multi-structure PDBS viewing, 
 - `view.pca()` - for molecular viewing of bio3d PCA results, 
 - `view.nma()` - for molecular viewing of bio3d NMA results, 
 - `view.xyz()` - for molecular viewing of bio3d trajectory data. 
 
-The returned output from these functions is an NGLVieweR object that can be further customized and added to using NGLVieweR functions such as `setSpin()`, `setRock()`, `addRepresentation()`, `addStructure()`, `setRotation()` etc. See the references for full details.
+Each function returns an NGLVieweR object, ehich can be further customized and added to using NGLVieweR functions such as `setSpin()`, `setRock()`, `addRepresentation()`, `addStructure()`, `setRotation()` etc. Refer to the NGLVieweR documentation for more customization options.
 
 
 ## Single structure models
@@ -93,7 +108,7 @@ view.pdb(ras, backgroundColor = "pink", colorScheme="sse",
          highlight.style="vdw")
 ```
 
-You can always save the returned object and add to them later, for example
+You can always save the returned object and add to it later, for example
 
 ```{r}
 v <- view.pdb(ras, water.rm = TRUE)
@@ -103,16 +118,16 @@ addRepresentation(v, "ball+stick") |>
 
 ## Multi-model data
 
-The `view.pdb()` function is designed to also deal with multi-model files produced as trajectories from bio3d or obtained from any other source such as NMR structures, for example:
+The `view.pdb()` function also supports multi-model files produced as trajectories from bio3d or obtained from any other source such as NMR structures, for example:
 
-```{r}
+```{r, warning=FALSE}
 pdb <- read.pdb("2MPS", multi=TRUE)
 view.pdb(pdb) 
 ```
 
 ## Multiple structure ensembles
 
-To view `pdbs` multi-structure objects from bio3d use the `view.pdbs()` function, for example:
+To view multi-structure `pdbs` objects from bio3d use the `view.pdbs()` function, for example:
 
 ```{r pdbs1, warning=FALSE}
 data(transducin)
@@ -281,7 +296,16 @@ view.nma(n)
 
 ## Saving an image
 
-ToDo: how best to capture such an image? Can we use `snapShot()` see: https://nvelden.github.io/NGLVieweR/reference/snapShot.html
+Capturing a static image from any interactive widget or NGL object is possible with the `view2png()` function:
+
+```{r, eval=FALSE}
+v <- view.pdb(ras)
+img <- view2png(v, autocrop=TRUE)
+```
+![Static PNG image from view2png](../man/figures/snapshot.png)
+> Side-note: This function currently uses the **webshot2** and **magic** packages. The later being an interface to ImageMagic which must be installed on your computer. We will likely remove these dependencies in the future.
+
+There is also the NGLVieweR `snapShot()` function but that only works in shiny mode: https://nvelden.github.io/NGLVieweR/reference/snapShot.html
 
 
 

@@ -22,6 +22,7 @@ reference:
   - pdb2string
   - pdbs2string
   - pca2string
+  - view2png
 
 - subtitle: Internal functions
   desc: These functions are used to check user specified color and graphic

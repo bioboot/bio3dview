@@ -23,9 +23,12 @@ Convert a \strong{bio3d} multi-structure \code{pdbs} object to a multi-element
 character vector that can be used as input for \strong{NGLVieweR} and r3dmol.
 }
 \examples{
-  pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
-  files <- list.files(path=pth, full.names = TRUE)
-  pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
+  #pth <- "~/Desktop/courses/BIMM143/class10/pdbs/split_chain/"
+  #files <- list.files(path=pth, full.names = TRUE)
+  #pdbs <- bio3d::pdbaln(files, fit=TRUE, exefile="msa")
+
+ data(transducin, package="bio3d")
+ attach(transducin)
 
  NGLVieweR::NGLVieweR( bio3d::pdbs2pdb(pdbs), format="pdb") |>
     NGLVieweR::addRepresentation("cartoon")

@@ -739,3 +739,46 @@ view.pdbs2 <- function(pdbs,
 
 
 
+#' Render any htmlwidget to a PNG file
+#'
+#' @param widget
+#' @param file file name of output image. Should end with an image file type
+#'   (‘.png’, ‘.jpg’, ‘.jpeg’, or ‘.webp’) or ‘.pdf’.
+#' @param width Viewport width
+#' @param height Viewport height
+#' @param delay Time to wait before taking screenshot, in seconds. Sometimes a
+#'   longer delay is needed for all assets to display properly.
+#' @param autocrop  logical, if TRUE the `magic` package is used to trim/remove
+#'   white space around the resulting image
+#'
+#' @returns returns image file name
+#' @export
+#'
+#' @examples
+#' #ras <- read.pdb("5p21")
+#' #v <- view.pdb(ras)
+#' #view2png(v)
+view2png <- function(widget, file="snapshot.png", width = 800, height = 600, delay = 0.2, autocrop=FALSE) {
+  # Save widget to a temp HTML file
+  tmp <- tempfile(fileext = ".html")
+  htmlwidgets::saveWidget(widget, tmp)
+
+  # Take screenshot of the HTML widget
+  webshot2::webshot(tmp, file,
+                    vwidth = width, vheight = height,
+                    delay = delay)
+                    #cliprect="viewport", zoom=2)
+
+  unlink(tmp)
+
+  if(autocrop) {
+    # Optional auto-crop
+    img <- magick::image_read(file)
+    img_trimmed <- magick::image_trim(img)
+    magick::image_write(img_trimmed, file)
+  }
+
+  # Return the file path for knitr
+  return(file)
+}
+

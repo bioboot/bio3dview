@@ -741,7 +741,7 @@ view.pdbs2 <- function(pdbs,
 
 #' Render any htmlwidget to a PNG file
 #'
-#' @param widget
+#' @param widget a NGLVieweR object as produced from `view.pdb()` and friends.
 #' @param file file name of output image. Should end with an image file type
 #'   (‘.png’, ‘.jpg’, ‘.jpeg’, or ‘.webp’) or ‘.pdf’.
 #' @param width Viewport width
@@ -782,3 +782,224 @@ view2png <- function(widget, file="snapshot.png", width = 800, height = 600, del
   return(file)
 }
 
+#' Experimental Universal Color Parameter Handler for Bio3DView Functions
+#'
+#' @param obj A bio3d object (pdb, pdbs, nma, pca)
+#' @param color Color specification, which can be:
+#'   - A keyword string ("chain", "residue", "bfactor", "sstruc", etc.)
+#'   - A single color (e.g., "red", "#FF0000")
+#'   - A vector of colors for chains, structures, or atoms
+#'   - A numeric vector of values to map to colors
+#'   - A function that generates colors
+#'   - A list with specific coloring instructions
+#'
+#' @return A list containing NGLVieweR parameters and rendering instructions
+process_color <- function(obj, color = NULL) {
+  # Default coloring when color is NULL
+  if (is.null(color)) {
+    if (inherits(obj, "pdbs")) {
+      return(list(
+        type = "structure",
+        colors = bio3d::vmd_colors(length(obj$id)),
+        param = NULL  # Will be set per structure
+      ))
+    } else {
+      return(list(
+        type = "property",
+        param = list(colorScheme = "residueindex")
+      ))
+    }
+  }
+
+  # Handle string keywords for built-in color schemes
+  if (length(color) == 1 && is.character(color)) {
+    # Check if it's a recognized NGL colorScheme
+    known_schemes <- c("residueindex", "resname", "modelindex", "sstruc",
+                       "bfactor", "chainid", "chainindex", "atomindex",
+                       "occupancy", "hydrophobicity", "random", "element",
+                       "validation")
+
+    # Add our custom aliases
+    aliases <- c("chain", "chains", "sse", "ss", "b", "resno", "resid", "res")
+
+    if (color %in% known_schemes || color %in% aliases) {
+      return(list(
+        type = "property",
+        param = list(colorScheme = color_key_match(color))
+      ))
+    } else {
+      # Assume it's a single color
+      return(list(
+        type = "single",
+        param = list(color = color)
+      ))
+    }
+  }
+
+  # Handle a vector of colors
+  if (is.character(color) && length(color) > 1) {
+    # Determine what these colors apply to
+    if (inherits(obj, "pdbs") && length(color) == length(obj$id)) {
+      return(list(
+        type = "structure",
+        colors = color
+      ))
+    } else if (inherits(obj, "pdb")) {
+      chains <- unique(obj$atom$chain)
+      if (length(color) == length(chains)) {
+        return(list(
+          type = "chain",
+          colors = color,
+          chains = chains
+        ))
+      } else if (length(color) == nrow(obj$atom)) {
+        return(list(
+          type = "atom",
+          atom_colors = color
+        ))
+      }
+    }
+  }
+
+  # Handle numeric vector (values to map to colors)
+  if (is.numeric(color)) {
+    # Determine palette based on values
+    is_diverging <- min(color, na.rm = TRUE) < 0 && max(color, na.rm = TRUE) > 0
+    palette_fn <- if (is_diverging) {
+      colorRampPalette(c("blue", "white", "red"))
+    } else {
+      colorRampPalette(c("white", "steelblue"))
+    }
+
+    # Scale values between 0-1
+    rng <- range(color, na.rm = TRUE)
+    scaled <- (color - rng[1]) / (rng[2] - rng[1])
+
+    # Map to colors
+    atom_colors <- palette_fn(100)[ceiling(scaled * 99) + 1]
+
+    # Determine if these are for atoms or structures
+    if (inherits(obj, "pdbs") && length(color) == length(obj$id)) {
+      return(list(
+        type = "structure",
+        colors = atom_colors
+      ))
+    } else {
+      return(list(
+        type = "atom",
+        atom_colors = atom_colors,
+        values = color  # Keep original values for reference
+      ))
+    }
+  }
+
+  # Handle color as a function
+  if (is.function(color)) {
+    if (inherits(obj, "pdb")) {
+      # Apply to residue numbers by default
+      resno <- unique(obj$atom$resno)
+      res_colors <- color(resno)
+
+      # Expand to all atoms
+      atom_colors <- res_colors[match(obj$atom$resno, resno)]
+
+      return(list(
+        type = "atom",
+        atom_colors = atom_colors
+      ))
+    }
+  }
+
+  # Handle color as a list with specific instructions
+  if (is.list(color)) {
+    return(color)  # Pass through advanced configuration
+  }
+
+  # Default fallback
+  return(list(
+    type = "property",
+    param = list(colorScheme = "residueindex")
+  ))
+}
+
+#' Experimental view.pdb() function using color checker
+b <- function(pdb,
+              color = NULL,
+              representation = "cartoon",
+              ligand = TRUE,
+              ligand.style = "licorice",
+              backgroundColor = "white",
+              highlight = NULL,
+              highlight.style = "ball+stick",
+              water.rm = FALSE) {
+
+  # Process inputs
+  if (water.rm) {
+    pdb <- bio3d::atom.select(pdb, string="water", inverse=TRUE, value=TRUE)
+  }
+
+  # Get PDB string and set up model
+  x <- pdb2string(pdb)
+  representation <- style_key_match(representation)
+  highlight.style <- style_key_match(highlight.style)
+  ligand.style <- style_key_match(ligand.style)
+
+  # Find ligands
+  lig <- bio3d::atom.select(pdb, "ligand", value=TRUE)
+  lig.resid <- unique(lig$atom$resid)
+
+  # Process color specification
+  color_info <- process_color(pdb, color)
+
+  # Initialize model
+  model <- NGLVieweR::NGLVieweR(x, format="pdb") |>
+    NGLVieweR::stageParameters(backgroundColor = backgroundColor)
+
+  # Apply coloring based on type
+  if (color_info$type == "property") {
+    model <- model |>
+      NGLVieweR::addRepresentation(representation, param = color_info$param)
+  } else if (color_info$type == "single") {
+    model <- model |>
+      NGLVieweR::addRepresentation(representation, param = color_info$param)
+  } else if (color_info$type == "chain") {
+    chains <- paste(":", color_info$chains, sep="")
+    for (j in 1:length(chains)) {
+      model <- model |>
+        NGLVieweR::addRepresentation(representation,
+                                     param = list(color = color_info$colors[j], sele = chains[j]))
+    }
+  } else if (color_info$type == "atom") {
+    # For atom coloring, we need to use a custom approach
+    # This could be implemented by:
+    # 1. Creating a temporary PDB file with modified B-factors
+    # 2. Using a specialized atom selection syntax in NGLVieweR
+    # 3. Using NGLVieweR's setColor method if available
+
+    # For now, a simplified approach using B-factors
+    temp_pdb <- pdb
+    temp_pdb$atom$b <- 1:length(temp_pdb$atom$b)  # placeholder for real values
+
+    # In reality, you'd map color_info$atom_colors to B-factors here
+    # Then use colorScheme = "bfactor"
+    model <- model |>
+      NGLVieweR::addRepresentation(representation,
+                                   param = list(colorScheme = "bfactor"))
+  }
+
+  # Add ligand
+  if (length(lig.resid) > 0 && ligand) {
+    model <- model |> NGLVieweR::addRepresentation(ligand.style,
+                                                   param = list(sele = paste(lig.resid, collapse = " "), radius = 0.3))
+  }
+
+  # Highlight atoms
+  if (!is.null(highlight)) {
+    highlight.eleno <- pdb$atom[highlight$atom,]$eleno
+    eleno <- paste(paste("@", highlight.eleno, sep = ""), collapse = " ")
+    model <- model |>
+      NGLVieweR::addRepresentation(highlight.style, param = list(sele = eleno))
+  }
+
+  return(model)
+}

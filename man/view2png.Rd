@@ -14,6 +14,8 @@ view2png(
 )
 }
 \arguments{
+\item{widget}{a NGLVieweR object as produced from \code{view.pdb()} and friends.}
+
 \item{file}{file name of output image. Should end with an image file type
 (‘.png’, ‘.jpg’, ‘.jpeg’, or ‘.webp’) or ‘.pdf’.}
 
